@@ -1,0 +1,17 @@
+# Maven builds
+target
+
+# Maven releases
+release.properties
+pom.xml.releaseBackup
+*/pom.xml.releaseBackup
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# IntelliJ Idea
+.idea
+*.iml
+
+# Local runs
+logs/

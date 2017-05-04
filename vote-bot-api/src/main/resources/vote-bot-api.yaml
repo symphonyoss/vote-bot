@@ -1,0 +1,155 @@
+swagger: '2.0'
+info:
+  version: '0.0.1'
+  title: Vote Bot API
+  description: |
+produces:
+  - application/json
+tags:
+  - Service
+schemes:
+  - http
+  - https
+basePath: '/votebot'
+paths:
+  '/v1/proposal/{id}':
+    get:
+      summary: Retreive vote proposal by VoteId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: long
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/VoteProposalV1'
+        '400':
+          description: 'Bad request.'
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        '403':
+          description: 'Forbidden: Certificate authentication is not allowed for the requested user.'
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+        '500':
+          description: 'Server error, see response body for further details.'
+          schema:
+            $ref: '#/definitions/ErrorDTO'
+      tags:
+        - Proposal
+definitions:
+  ErrorDTO:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+  SymUserV1:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      emailAddress:
+        type: string
+        format: email
+      firstName:
+        type: string
+      lastName:
+        type: string
+      displayName:
+        type: string
+      title:
+        type: string
+      company:
+        type: string
+      username:
+        type: string
+      avatars:
+        type: array
+        items:
+          $ref: '#/definitions/AvatarV1'
+  AvatarV1:
+    type: object
+    properties:
+      size:
+        description: 'The Avatar Size'
+        type: string
+      url:
+        description: 'Url of the image'
+        type: string
+  ParticipantV1:
+    type: object
+    properties:
+      symUser:
+        $ref: '#/definitions/SymUserV1'
+      voteCast:
+        type: boolean
+  VoteCommentV1:
+    type: object
+    properties:
+      comment:
+        type: string
+      id:
+        type: integer
+        format: int32
+      symUser:
+        $ref: '#/definitions/SymUserV1'
+      timestamp:
+        type: integer
+        format: int64
+  ProposalV1:
+    type: object
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+  VoteProposalV1:
+      type: object
+      description: |
+        Voting proposal
+      properties:
+        participants:
+          type: array
+          items:
+            $ref: '#/definitions/ParticipantV1'
+        abstain:
+          type: integer
+          format: int32
+        yea:
+          type: integer
+          format: int32
+        nay:
+          type: integer
+          format: int32
+        completed:
+          type: boolean
+        comments:
+          type: array
+          items:
+            $ref: '#/definitions/VoteCommentV1'
+        approvalPercentage:
+          type: integer
+          format: int32
+        reminderFrequency:
+          type: integer
+          format: int64
+        totalCast:
+          type: integer
+          format: int64
+        proposal:
+          $ref: '#/definitions/ProposalV1'
+        result:
+          type: string
+          default: ACTIVE
+          enum:
+            - ACTIVE
+            - APPROVED
+            - COMPLETE
+            - FAILED
+            - TIE
