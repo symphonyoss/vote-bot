@@ -15,3 +15,7 @@ hs_err_pid*
 
 # Local runs
 logs/
+env.sh
+env-dev.sh
+env-prod.sh
+certs

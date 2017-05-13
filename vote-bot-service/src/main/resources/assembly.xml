@@ -25,13 +25,13 @@
         xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-    <id>distribution</id>
+    <id>appassembler</id>
     <formats>
         <format>zip</format>
     </formats>
     <fileSets>
         <fileSet>
-            <directory>target/vote-bot-0.9.0</directory>
+            <directory>target/vote-bot</directory>
             <outputDirectory></outputDirectory>
         </fileSet>
     </fileSets>
@@ -42,7 +42,3 @@
         </file>
     </files>
 </assembly>
-
-
-
-

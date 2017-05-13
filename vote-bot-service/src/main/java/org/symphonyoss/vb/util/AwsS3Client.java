@@ -31,6 +31,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.amazonaws.regions.Regions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.vb.config.BotConfig;
@@ -56,7 +57,7 @@ public class AwsS3Client {
     public AwsS3Client() {
 
         AWSCredentials credentials = new BasicAWSCredentials(System.getProperty(BotConfig.S3_KEY_ID), System.getProperty(BotConfig.S3_ACCESS_KEY));
-        s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+        s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
 
 
     }
