@@ -101,6 +101,8 @@ public final class BotConfig {
     public final static String MAIL_SMTP_USER_ENV = "MAIL_SMTP_USER";
     public final static String MAIL_SMTP_PASSWORD_ENV = "MAIL_SMTP_PASSWORD";
     public final static String MAIL_SMTP_AUTH_ENV = "MAIL_SMTP_AUTH";
+    public final static String MAIL_SMTP_PORT_ENV = "MAIL_SMTP_PORT";
+    public final static String MAIL_SMTP_DEBUG_ENV = "MAIL_SMTP_DEBUG";
     public final static String MAIL_VB_FROM_ENV = "MAIL_VB_FROM";
     public final static String MAIL_SEND_EMAIL_ENV = "MAIL_SEND_EMAIL";
     public final static String MAIL_DISTRO_EMAIL_ENV = "MAIL_DISTRO_EMAIL";
@@ -179,6 +181,8 @@ public final class BotConfig {
         properties.put(MAIL_VB_FROM, MAIL_VB_FROM_ENV);
         properties.put(MAIL_SEND_EMAIL, MAIL_SEND_EMAIL_ENV);
         properties.put(MAIL_SMTP_AUTH, MAIL_SMTP_AUTH_ENV);
+        properties.put(MAIL_SMTP_PORT, MAIL_SMTP_PORT_ENV);
+        properties.put(MAIL_SMTP_DEBUG, MAIL_SMTP_DEBUG_ENV);
         properties.put(MAIL_DISTRO_EMAIL, MAIL_DISTRO_EMAIL_ENV);
         properties.put(WAR_FILE, WAR_FILE_ENV);
         properties.put(S3_ACCESS_KEY, S3_ACCESS_KEY_ENV);

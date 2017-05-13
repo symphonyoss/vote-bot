@@ -31,7 +31,6 @@
     <packaging>pom</packaging>
 
     <properties>
-        <version.minor>0.9.0</version.minor>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- maven-compiler-plugin -->
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -39,7 +38,6 @@
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <build_version>${project.version}</build_version>
-        <build_number>00001</build_number>
         <build.helper.maven.plugin.version>1.9.1</build.helper.maven.plugin.version>
         <version.war.plugin>2.5</version.war.plugin>
         <client-version>2.2.11</client-version>
@@ -206,133 +204,4 @@
         </dependency>
 
     </dependencies>
-    <!-- Temporary until the ssf-enforcer-rules dependency is released on Maven Central -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>ossrh</id>
-            <name>OSSRH Public Group</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <!-- Temporary until the ssf-jar-resource-bundle dependency is released on Maven Central -->
-    <repositories>
-        <repository>
-            <id>ossrh</id>
-            <name>OSSRH Public Group</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <build>
-        <plugins>
-
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.shared</groupId>
-                        <artifactId>maven-filtering</artifactId>
-                        <version>1.3</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/${project.artifactId}-${project.version}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}/swagger-ui-master/dist
-                                    </directory>
-                                    <filtering>true</filtering>
-                                    <excludes>
-                                        <exclude>index.html</exclude>
-                                    </excludes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skipAssembly>true</skipAssembly>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
-                <configuration>
-
-                    <repositoryName>lib</repositoryName>
-                    <repositoryLayout>flat</repositoryLayout>
-                    <useWildcardClassPath>true</useWildcardClassPath>
-                    <!-- Set the target configuration directory to be used in the bin scripts -->
-                    <configurationDirectory>conf</configurationDirectory>
-                    <logsDirectory>logs</logsDirectory>
-                    <!-- Copy the contents from "/src/main/config" to the target
-                         configuration directory in the assembled application -->
-                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
-                    <!-- Include the target configuration directory in the beginning of
-                         the classpath declaration in the bin scripts -->
-                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
-                    <!-- set alternative assemble directory -->
-                    <assembleDirectory>${project.build.directory}/vote-bot-${version.minor}
-                    </assembleDirectory>
-                    <!-- Extra JVM arguments that will be included in the bin scripts -->
-                    <extraJvmArguments>-Xms128m -Xmx512m -Dbot.config.dir=${CONFIG_DIR}
-                        -Dlog4j.configurationFile=${CONFIG_DIR}/log4j.properties
-                        -Dwar.file="$BASEDIR/lib/vote-bot-${version}.war"
-                    </extraJvmArguments>
-
-                    <!-- Generate bin scripts for windows and unix pr default -->
-                    <platforms>
-                        <platform>windows</platform>
-                        <platform>unix</platform>
-                    </platforms>
-                    <programs>
-                        <program>
-                            <mainClass>org.symphonyoss.vb.VoteBot</mainClass>
-                            <id>VoteBot</id>
-                            <!-- Only generate windows bat script for this application -->
-                            <platforms>
-                                <platform>windows</platform>
-                                <platform>unix</platform>
-                            </platforms>
-                        </program>
-
-                    </programs>
-                </configuration>
-            </plugin>
-        </plugins>
-
-    </build>
-
-
 </project>
