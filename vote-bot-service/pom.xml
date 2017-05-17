@@ -14,7 +14,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
@@ -67,25 +66,18 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
-                <executions>
-                    <execution>
-
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptor>src/main/resources/assembly.xml</descriptor>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
+                <version>2.0.0</version>
+                <executions>
+                  <execution>
+                    <id>build-assembled-folder</id>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>assemble</goal>
+                    </goals>
+                  </execution>
+                </executions>
                 <configuration>
                     <repositoryName>lib</repositoryName>
                     <repositoryLayout>flat</repositoryLayout>
@@ -100,12 +92,9 @@
                          the classpath declaration in the bin scripts -->
                     <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
                     <!-- set alternative assemble directory -->
-                    <assembleDirectory>${project.build.directory}/vote-bot-${version.minor}
-                    </assembleDirectory>
+                    <assembleDirectory>${project.build.directory}/vote-bot</assembleDirectory>
                     <!-- Extra JVM arguments that will be included in the bin scripts -->
-                    <extraJvmArguments>-Xms128m -Xmx512m -Dbot.config.dir=${CONFIG_DIR} -Dlog4j.configurationFile=${CONFIG_DIR}/log4j.properties
-                        -Dwar.file="$BASEDIR/lib/vote-bot-service-${version}.war"
-                    </extraJvmArguments>
+                    <extraJvmArguments>-Xms128m -Xmx512m -Dbot.config.dir=${CONFIG_DIR} -Dlog4j.configurationFile=${CONFIG_DIR}/log4j.properties -Dwar.file="$BASEDIR/lib/vote-bot-service-${version}.war"</extraJvmArguments>
 
                     <!-- Generate bin scripts for windows and unix pr default -->
                     <platforms>
@@ -126,8 +115,23 @@
                     </programs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <executions>
+                  <execution>
+                    <id>build-assembled-zip</id>
+                    <phase>package</phase>
+                    <goals>
+                      <goal>single</goal>
+                    </goals>
+                  </execution>
+                </executions>
+                <configuration>
+                    <descriptor>src/main/resources/assembly.xml</descriptor>
+                </configuration>
+            </plugin>
         </plugins>
-
     </build>
-
 </project>

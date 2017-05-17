@@ -1,8 +1,38 @@
 The bot provides vote capabilities on proposals amongst a defined list of users over a relay chat.
 
+# Build
+
+Type `mvn package`.
+
+When the build completes, the ZIP file containing all bot logic can be found at `vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT-appassembler.zip`.
+
+# Deploy to Openshift
+
+First of all, select which environment/build to target by setting these environment variables:
+
+```
+export OC_PROJECT=botfarm
+# Choose between votebot-dev and votebot-prod
+export OC_DEPLOY=votebot-dev
+```
+
+1. [Install Openshift commandline](https://docs.openshift.org/latest/cli_reference/get_started_cli.html) tool `oc`
+2. Authenticate against Openshift Online instance of the Symphony Software Foundation using `oc login https://api.starter-us-east-1.openshift.com --token=$OC_TOKEN` ; the `OC_TOKEN` can be requested to Foundation Staff
+3. Use Openshift project using `oc project $OC_PROJECT`
+4. Checkout this project, `cd` into the root folder and build the project with `mvn package`
+5. Unzip the package being created using `unzip vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT-appassembler.zip -d vote-bot-service/target/oc`
+6. Deploy the archive created using `oc start-build $OC_DEPLOY --from-dir=vote-bot-service/target/oc/vote-bot-service-0.9.0-SNAPSHOT/ --wait=true -n $OC_PROJECT`
+
+# Reset Openshift environment
+In order to run these commands you need to have access to the Openshift YAML definitions, which are managed by Foundation Staff.
+
+1. Delete all existing Openshift resources - `oc delete imagestream $OC_DEPLOY; oc delete buildconfig $OC_DEPLOY; oc delete dc $OC_DEPLOY; oc delete svc $OC_DEPLOY; oc delete route $OC_DEPLOY; oc delete secret $OC_DEPLOY.certs`
+2. Create Openshift secrets - `oc process -f ./secrets/$OC_DEPLOY.yaml | oc create -f -`
+3. Create other Openshift resources - `oc process -f ./builds/$OC_DEPLOY-build-template.yaml | oc create -f -`
+
 ### PROPOSAL
- 
-To create a bot that can support generic voting capabilities over the Symphony network.  The initial contribution is built to specifically support proposals over a relay chat, but it can be expanded to support wide variety of voting types. 
+
+To create a bot that can support generic voting capabilities over the Symphony network.  The initial contribution is built to specifically support proposals over a relay chat, but it can be expanded to support wide variety of voting types.
 
 The current contributed feature set of the solution includes:
 * Single bot endpoint representing vote subsystem for a defined user base.
@@ -16,11 +46,11 @@ The current contributed feature set of the solution includes:
 		/list optional:[active/VoteID/archive p#] List votes by criteria (default: active)
 		/comment [VoteID] [comment] Add a comment to a registered vote
 		[/cancel [VoteID] Cancel an active vote.
-		
+
 * Comment support for proposals
 * Reminder notifications on all voting proposals to participants over IM and email.
 * Local storage for recording of all proposals using basic JSON objects.  Support for S3
-* Email notifications 
+* Email notifications
 * Archiving w/IM paging
 * Proposal recovery from restarts
 * Voting using emoticons (too many!)
@@ -32,7 +62,7 @@ Future work:
 * Virtual voting bodies (through one bot)
 * Vote-bot for chat rooms
 * Encrypted Signing
-	
+
 
 ### RATIONALE
 
@@ -41,5 +71,3 @@ Voting concepts are common in many social engagements.  Having a solution that c
 ### CORE DEVELOPERS
 
 Owner: Frank Tarsillo
-
-
