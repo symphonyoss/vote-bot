@@ -20,15 +20,13 @@
 # under the License.
 #
 
-before_script: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ openshift ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/download-files.sh | bash ; fi"
-
-after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ openshift ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
+after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
 
 language: java
 
 install: true
 script:
-- mvn clean install"
+- "mvn clean package ; unzip vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT-appassembler.zip -d vote-bot-service/target/oc"
 
 jdk:
   - oraclejdk8
@@ -36,5 +34,5 @@ jdk:
 env:
   global:
    # Used by oc-deploy.sh for CD
-   - OC_BINARY_FOLDER=vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT
-   - OC_BUILD_CONFIG_NAME=votebot-dev
+   - OC_BINARY_FOLDER=vote-bot-service/target/oc/vote-bot-service-0.9.0-SNAPSHOT
+   - OC_BUILD_CONFIG_NAME=votebot-prod
