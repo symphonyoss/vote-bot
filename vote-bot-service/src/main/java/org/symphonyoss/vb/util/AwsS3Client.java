@@ -27,6 +27,7 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
@@ -56,34 +57,12 @@ public class AwsS3Client {
     public AwsS3Client() {
 
         AWSCredentials credentials = new BasicAWSCredentials(System.getProperty(BotConfig.S3_KEY_ID), System.getProperty(BotConfig.S3_ACCESS_KEY));
-        s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+        s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
 
 
     }
 
     public static void main(String[] args) {
-
-//        AwsS3Client awsClient = new AwsS3Client();
-//
-//
-//        List<S3ObjectSummary> objectSummaries = awsClient.getAllObjects("symphony-esco", "email/incoming");
-//
-//        for (S3ObjectSummary objectSummary :
-//                objectSummaries) {
-//
-//
-//            System.out.println(" - " + objectSummary.getKey() + "  " +
-//                    "(size = " + objectSummary.getSize() +
-//                    " lastmodified = " + objectSummary.getLastModified() +
-//                    " storage class = " + objectSummary.getStorageClass() +
-//                    ")");
-//
-//            try {
-//                awsClient.displayTextInputStream(awsClient.getObject(objectSummary));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
     }
 

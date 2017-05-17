@@ -76,6 +76,7 @@ public final class BotConfig {
     public final static String S3_ACCESS_KEY = "s3.access.key";
     public final static String S3_KEY_ID = "s3.key.id";
     public final static String S3_BUCKET = "s3.bucket";
+    public final static String S3_REGION = "s3.region";
     public final static String VB_S3_PREFIX_JSON = "vb.s3.prefix.json";
 
 
@@ -112,6 +113,7 @@ public final class BotConfig {
     public final static String S3_KEY_ID_ENV = "S3_KEY_ID";
     public final static String S3_BUCKET_ENV = "S3_BUCKET";
     public final static String VB_S3_PREFIX_JSON_ENV = "VB_S3_PREFIX_JSON";
+    public final static String S3_REGION_ENV = "S3_REGION";
 
     static Map<String, String> properties = new HashMap<>();
 
@@ -188,6 +190,7 @@ public final class BotConfig {
         properties.put(MAIL_S3_PREFIX_INCOMING, MAIL_S3_PREFIX_INCOMING_ENV);
         properties.put(MAIL_S3_PREFIX_PROCESSED, MAIL_S3_PREFIX_PROCESSED_ENV);
         properties.put(VB_S3_PREFIX_JSON, VB_S3_PREFIX_JSON_ENV);
+        properties.put(S3_REGION, S3_REGION_ENV);
 
         for (Map.Entry<String, String> entry : properties.entrySet()) {
 
