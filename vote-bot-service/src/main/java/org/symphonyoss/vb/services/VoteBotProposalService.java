@@ -420,6 +420,8 @@ public class VoteBotProposalService implements ChatServiceListener, ChatListener
                 activeVotingProposals.put(voteProposal.getVoteId(), voteProposal);
                 VoteProposalWorker voteProposalWorker = new VoteProposalWorker(voteProposal);
 
+                voteProposalWorker.setRecovered(true);
+
 
                 new Thread(voteProposalWorker).start();
 

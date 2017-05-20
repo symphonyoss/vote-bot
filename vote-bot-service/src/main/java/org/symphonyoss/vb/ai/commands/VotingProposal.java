@@ -26,7 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.common.MLTypes;
 import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.vb.config.BotConfig;
 import org.symphonyoss.vb.constants.Constants;
+import org.symphonyoss.vb.mail.MailerWorker;
 import org.symphonyoss.vb.model.Vote;
 import org.symphonyoss.vb.model.VoteProposal;
 import org.symphonyoss.vb.model.VoteProposalFormatter;
@@ -63,7 +65,7 @@ public class VotingProposal extends Command {
 
             logger.info("Vote being cast {} {} {} ", symMessage.getFromUserId(), chunks[1], chunks[2]);
 
-            Integer voteId = new Integer(chunks[1].trim());
+            Integer votePropsalId = new Integer(chunks[1].trim());
 
 
             String voteType = chunks[2].trim().toLowerCase();
@@ -75,7 +77,7 @@ public class VotingProposal extends Command {
             if (type != null) {
 
 
-                VoteProposal voteProposal = voteBotProposalService.getActiveVotingProposals().get(voteId);
+                VoteProposal voteProposal = voteBotProposalService.getActiveVotingProposals().get(votePropsalId);
 
 
                 if (voteProposal != null) {
@@ -85,7 +87,7 @@ public class VotingProposal extends Command {
                     vote.setSymUser(voteBotProposalService.getMemberChats().get(symMessage.getFromUserId()).getRemoteUsers().iterator().next());
                     vote.setVoteTime(System.currentTimeMillis());
 
-                    replyVoteCast(symMessage, voteProposal.getVoteId(), voteProposal.castVote(vote));
+                    replyVoteCast(symMessage, voteProposal.getVoteId(), voteProposal.castVote(vote), vote);
 
                     try {
 
@@ -108,11 +110,11 @@ public class VotingProposal extends Command {
         return false;
     }
 
-    private void replyVoteCast(SymMessage symMessage, Integer voteId, boolean result) {
+    private void replyVoteCast(SymMessage symMessage, Integer voteProposalId, boolean result, Vote vote) {
 
         if (result) {
 
-            reply(symMessage, voteId);
+            reply(symMessage, voteProposalId, vote);
 
         } else {
             symMessage.setMessage(Constants.FAILED_VOTE_MESSAGE);
@@ -124,7 +126,12 @@ public class VotingProposal extends Command {
     }
 
 
-    private void reply(SymMessage symMessage, Integer voteId) {
+    private void reply(SymMessage symMessage, Integer voteProposalId, Vote vote) {
+
+
+
+
+        //Reply over IM
 
         StringBuilder message = new StringBuilder();
         message.append(MLTypes.START_ML);
@@ -133,16 +140,40 @@ public class VotingProposal extends Command {
         message.append(Constants.VOTE_SEARCH_HEADER);
 
 
-        VoteProposal voteProposal = voteBotProposalService.getActiveVotingProposals().get(voteId) != null ? voteBotProposalService.getActiveVotingProposals().get(voteId) : voteBotProposalService.getArchiveVotingProposals().get(voteId);
+        VoteProposal voteProposal = voteBotProposalService.getActiveVotingProposals().get(voteProposalId) != null ? voteBotProposalService.getActiveVotingProposals().get(voteProposalId) : voteBotProposalService.getArchiveVotingProposals().get(voteProposalId);
 
         if (voteProposal != null)
             message.append(VoteProposalFormatter.getStatusMessageFull(voteProposal, false, symMessage.getFromUserId()));
 
 
         message.append(MLTypes.END_ML);
+
+
+
+        //Reply vote to email distribution.
+
+        new Thread(new MailerWorker(
+                System.getProperty(BotConfig.MAIL_DISTRO_EMAIL),
+                System.getProperty(BotConfig.MAIL_VB_FROM),
+                "[VOTE CAST][" + vote.getSymUser().getDisplayName() + "][" + voteProposal.getVoteId() + "] " + voteProposal.getProposal().getName(),
+                vote.getSymUser().getDisplayName() + ": " + symMessage.getMessageText()
+        )
+        ).start();
+
+
+
+
+        //Set reply message over IM
         symMessage.setMessage(message.toString());
 
+
+
         voteBotProposalService.replyToMessage(symMessage);
+
+
+
+
+
     }
 
 }

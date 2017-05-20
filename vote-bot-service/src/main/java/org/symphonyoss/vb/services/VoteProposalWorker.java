@@ -43,6 +43,7 @@ public class VoteProposalWorker implements Runnable {
     private VoteProposal voteProposal;
     private final Logger logger = LoggerFactory.getLogger(VoteProposalWorker.class);
     private Participant escoPrivate = new Participant();
+    private boolean recovered = false;
 
 
     public VoteProposalWorker(VoteProposal voteProposal) {
@@ -73,6 +74,8 @@ public class VoteProposalWorker implements Runnable {
         long remindTime = System.currentTimeMillis() + initRemindTime;
 
         logger.info("Init Remind in [{}]]", initRemindTime);
+
+
 
         remind(true);
 
@@ -159,7 +162,8 @@ public class VoteProposalWorker implements Runnable {
 
         }
 
-        if (newVote)
+        //Send to wider distribution list if not recovered.
+        if (newVote && !isRecovered())
             mail(escoPrivate, true);
 
 
@@ -199,4 +203,12 @@ public class VoteProposalWorker implements Runnable {
         }
     }
 
+
+    public boolean isRecovered() {
+        return recovered;
+    }
+
+    public void setRecovered(boolean recovered) {
+        this.recovered = recovered;
+    }
 }
