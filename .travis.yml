@@ -20,8 +20,9 @@
 # under the License.
 #
 
-after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
-
+# TODO - re-enable it only on master when Travis build issues are fixed
+# after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
+after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
 language: java
 
 install: true
@@ -34,5 +35,5 @@ jdk:
 env:
   global:
    # Used by oc-deploy.sh for CD
-   - OC_BINARY_FOLDER=vote-bot-service/target/oc/vote-bot-service-0.9.0-SNAPSHOT
+   - OC_BINARY_ARCHIVE=vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT-appassembler.zip
    - OC_BUILD_CONFIG_NAME=votebot-prod
