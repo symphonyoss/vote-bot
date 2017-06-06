@@ -20,9 +20,8 @@
 # under the License.
 #
 
-# TODO - re-enable it only on master when Travis build issues are fixed
-# after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
-after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
+after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
+
 language: java
 
 install: true
