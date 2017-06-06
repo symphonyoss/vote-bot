@@ -87,7 +87,7 @@ public class MailReader {
 
     public static void main(String[] args) {
 
-        SymphonyClient symClient ;
+        SymphonyClient symClient;
         try {
             symClient = BotServices.get().getSymClientByUser("vote.bot@markit.com");
 
@@ -127,12 +127,21 @@ public class MailReader {
                 if (message == null)
                     continue;
 
-                SymMessage symMessage = getSymMessage(message);
+                try {
 
-                if (symMessage != null) {
+                    SymMessage symMessage = getSymMessage(message);
 
-                    logger.info("New mail message: from: {}, subject: {}, body: {}", symMessage.getSymUser().getEmailAddress(), message.getSubject(), symMessage.getMessage());
-                    messages.add(symMessage);
+                    if (symMessage != null) {
+
+                        logger.info("New mail message: from: {}, subject: {}, body: {}", symMessage.getSymUser().getEmailAddress(), message.getSubject(), symMessage.getMessage());
+                        messages.add(symMessage);
+                    }
+
+                } catch (SymException ex) {
+
+                    logger.error("Could not convert email to SymMessage from file [{}]", objectSummary.getKey(), ex);
+
+
                 }
 
                 String destKey = objectSummary.getKey().substring(objectSummary.getKey().lastIndexOf("/") + 1);
@@ -142,7 +151,7 @@ public class MailReader {
                 awsS3Client.moveObject(objectSummary, System.getProperty(BotConfig.S3_BUCKET), System.getProperty(BotConfig.MAIL_S3_PREFIX_PROCESSED) + destKey);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Failed to process incoming email [{}]", objectSummary.getKey(), e);
             }
 
 
@@ -183,6 +192,7 @@ public class MailReader {
 
             messageText = getMessageText(message, messageText);
 
+            //First new line is considered <Enter> for now.
             if (messageText.contains("\n"))
                 messageText = messageText.substring(0, messageText.indexOf("\n")).trim();
 

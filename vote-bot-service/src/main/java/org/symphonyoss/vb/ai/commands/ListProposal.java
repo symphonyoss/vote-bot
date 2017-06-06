@@ -72,7 +72,7 @@ public class ListProposal extends Command{
         StringBuilder message = new StringBuilder();
         message.append(MLTypes.START_ML);
 
-        logger.info("List command issued {} {}", type, arg);
+        logger.info("List command issued with args {} {}", type, arg);
 
         if (type == null || type.equals(Constants.ACTIVE_PARAM)) {
 
