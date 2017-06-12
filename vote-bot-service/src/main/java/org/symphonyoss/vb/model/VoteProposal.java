@@ -59,10 +59,15 @@ public class VoteProposal extends VoteSession implements Serializable {
     }
 
     public void setCompleted(boolean completed) {
+
+        //recalculate for final status
+        update(false);
+
         if (result.equals(VoteResult.ACTIVE))
             result = VoteResult.FAILED;
 
         this.completed = completed;
+
 
     }
 
@@ -129,7 +134,7 @@ public class VoteProposal extends VoteSession implements Serializable {
 
                 participant.setVoteCast(true);
 
-                update();
+                update(true);
 
                 return true;
             }
@@ -141,7 +146,7 @@ public class VoteProposal extends VoteSession implements Serializable {
 
     }
 
-    public void update() {
+    public void update(boolean isActive) {
 
         yea = getVotes().stream().filter(vote -> vote.getVote() == VoteType.YEA).count();
         nay = getVotes().stream().filter(vote -> vote.getVote() == VoteType.NAY).count();
@@ -153,29 +158,25 @@ public class VoteProposal extends VoteSession implements Serializable {
         double passedScore = (getParticipants().size() / 2.0) + 1;
 
 
+        if (!isActive) {
+            //Approved path
+            if (passedScore <= yea) { //
 
-        //Approved path
-        if (passedScore <=  yea) { //
+                result = VoteResult.APPROVED;
 
-            result = VoteResult.APPROVED;
+                //Fail path
+            } else if (nay + abstain > passedScore) {
 
-            //Fail path
-        } else if (nay + abstain > passedScore) {
+                result = VoteResult.FAILED;
 
-            result = VoteResult.FAILED;
+                //TIE
+            } else if (yea == nay && totalRemain == 0) {
 
-            //TIE
-        } else if (yea == nay && totalRemain == 0) {
-
-            result = VoteResult.TIE;
+                result = VoteResult.TIE;
 
 
+            }
         }
-
-        //Think this should be put back..
-//        if (totalRemain == 0) {
-//            setCompleted(true);
-//        }
 
 
     }
@@ -217,7 +218,6 @@ public class VoteProposal extends VoteSession implements Serializable {
 
 
     }
-
 
 
     public List<VoteComment> getComments() {

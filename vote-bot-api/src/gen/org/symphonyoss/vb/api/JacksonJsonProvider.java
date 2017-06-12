@@ -23,5 +23,7 @@ public class JacksonJsonProvider extends JacksonJaxbJsonProvider {
             .setDateFormat(new RFC3339DateFormat());
 
         setMapper(objectMapper);
+
+
     }
 }

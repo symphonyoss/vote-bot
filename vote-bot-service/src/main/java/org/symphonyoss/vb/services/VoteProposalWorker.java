@@ -104,8 +104,6 @@ public class VoteProposalWorker implements Runnable {
         logger.info("Vote has ended for proposal {} with result {}", voteProposal.getDescription(), voteProposal.getResult());
 
 
-        voteProposal.update();
-        voteProposal.setCompleted(true);
 
         try {
 
