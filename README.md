@@ -71,3 +71,5 @@ Voting concepts are common in many social engagements.  Having a solution that c
 ### CORE DEVELOPERS
 
 Owner: Frank Tarsillo
+
+
