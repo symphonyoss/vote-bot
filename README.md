@@ -62,6 +62,7 @@ Future work:
 * Virtual voting bodies (through one bot)
 * Vote-bot for chat rooms
 * Encrypted Signing
+* Support for latest V4 MessageMLv2
 
 
 ### RATIONALE
