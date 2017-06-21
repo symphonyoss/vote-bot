@@ -25,10 +25,6 @@ package org.symphonyoss.vb.model;
 
 import org.apache.commons.lang.StringUtils;
 import org.symphonyoss.client.common.MLTypes;
-import org.symphonyoss.client.model.CacheType;
-import org.symphonyoss.client.services.SymUserCache;
-import org.symphonyoss.exceptions.UsersClientException;
-import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.vb.constants.Constants;
 import org.symphonyoss.vb.util.TimeDateFormatting;
 

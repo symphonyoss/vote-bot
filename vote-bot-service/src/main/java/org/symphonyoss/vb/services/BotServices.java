@@ -31,7 +31,7 @@ import org.symphonyoss.client.SymphonyClientFactory;
 import org.symphonyoss.client.impl.CustomHttpClient;
 import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.RoomService;
-import org.symphonyoss.exceptions.SymException;
+import org.symphonyoss.client.exceptions.SymException;
 import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.pod.model.Stream;
