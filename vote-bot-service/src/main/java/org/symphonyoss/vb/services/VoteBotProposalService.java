@@ -342,7 +342,7 @@ public class VoteBotProposalService implements ChatServiceListener, ChatListener
         String message = symMessage.getMessage();
 
 
-        symMessage.setMessage(message.replaceFirst(">", ">  " + MLTypes.START_BOLD + symUser.getDisplayName() + ": " + MLTypes.END_BOLD));
+        symMessage.setMessage(escapeData(message.replaceFirst(">", ">  " + MLTypes.START_BOLD + symUser.getDisplayName() + ": " + MLTypes.END_BOLD)));
 
 
         memberChats.forEach((key, value) -> {
@@ -521,6 +521,18 @@ public class VoteBotProposalService implements ChatServiceListener, ChatListener
 
     }
 
+
+
+    private  String escapeData(String data) {
+
+        if (data == null)
+            return null;
+
+        return data
+                .replace("&", "&amp;")
+                .replace("'", "&apos;");
+
+    }
 
     private String mlToText(String messageMl) {
         String textMessage = "";
