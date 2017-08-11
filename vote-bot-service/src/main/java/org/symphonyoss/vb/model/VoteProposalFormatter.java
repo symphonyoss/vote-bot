@@ -193,8 +193,8 @@ public class VoteProposalFormatter {
                 if (voteComment.getSymUser().getId() < 0) {
                     comment.append(": ").append(voteComment.getSymUser().getDisplayName()).append(" | ");
                 } else {
-                    //comment.append(": <mention uid=\"").append(voteComment.getSymUser().getId()).append("\"/> | ");
-                    comment.append(": ").append(voteComment.getSymUser().getDisplayName()).append(" | ");
+                    comment.append(": <mention uid=\"").append(voteComment.getSymUser().getId()).append("\"/> | ");
+                    //comment.append(": ").append(voteComment.getSymUser().getDisplayName()).append(" | ");
                 }
                 comment.append(voteComment.getComment());
 
@@ -239,8 +239,8 @@ public class VoteProposalFormatter {
         for (Vote vote : votes) {
 
             if (!isMail && vote.getSymUser().getId() >= 0) {
-              //  stringBuffer.append("<mention uid=\"").append(vote.getSymUser().getId()).append("\"/> | ");
-                stringBuffer.append(vote.getSymUser().getDisplayName()).append(" | ");
+                stringBuffer.append("<mention uid=\"").append(vote.getSymUser().getId()).append("\"/> | ");
+               // stringBuffer.append(vote.getSymUser().getDisplayName()).append(" | ");
             } else {
                 stringBuffer.append(vote.getSymUser().getDisplayName()).append(" | ");
             }
@@ -273,8 +273,8 @@ public class VoteProposalFormatter {
             //This needs to be fixed.
             if (!isMail && participant.getSymUser().getId() >= 0) {
 
-                //stringBuffer.append("<mention uid=\"").append(participant.getSymUser().getId()).append("\"/> | ");
-                stringBuffer.append(participant.getSymUser().getDisplayName()).append(" | ");
+                stringBuffer.append("<mention uid=\"").append(participant.getSymUser().getId()).append("\"/> | ");
+                //stringBuffer.append(participant.getSymUser().getDisplayName()).append(" | ");
             } else {
                 stringBuffer.append(participant.getSymUser().getDisplayName()).append(" | ");
             }
@@ -310,8 +310,8 @@ public class VoteProposalFormatter {
         for (Vote vote : votes) {
 
             if (!isMail && vote.getSymUser().getId() >= 0) {
-               // stringBuffer.append("<mention uid=\"").append(vote.getSymUser().getId()).append("\"/> | ");
-                stringBuffer.append(vote.getSymUser().getDisplayName()).append(" | ");
+                stringBuffer.append("<mention uid=\"").append(vote.getSymUser().getId()).append("\"/> | ");
+                //stringBuffer.append(vote.getSymUser().getDisplayName()).append(" | ");
             } else {
                 stringBuffer.append(vote.getSymUser().getDisplayName()).append(" | ");
             }
