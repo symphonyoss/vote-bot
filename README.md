@@ -1,3 +1,5 @@
+[![Votebot Watcher](https://hv0dbm9dsd.execute-api.us-east-1.amazonaws.com/Prod/votebot-badge)](https://foundation.symphony.com)
+
 The bot provides vote capabilities on proposals amongst a defined list of users over a relay chat.
 
 # Build
