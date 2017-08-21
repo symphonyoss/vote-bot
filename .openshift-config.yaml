@@ -1,0 +1,307 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: votebot-dev-build-template
+parameters:
+- name: BOT_NAME
+  description: The Bot name
+  displayName: Bot Name
+  required: true
+  value: "votebot-dev"
+- name: SEND_EMAIL
+  description: Whether the bot should send emails or not; defaults to false
+  displayName: Send Email?
+  required: true
+  value: "true"
+- name: ESCO_USER_LIST
+  description: The list of votebot users that are part of the relay
+  displayName: ESCo User List
+  required: true
+- name: ESCO_USER_VOTE
+  description: The list of votebot users that are allowed to vote
+  displayName: ESCo User Vote List
+  required: true
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${BOT_NAME}
+    name: s2i-java-binary
+  spec:
+    dockerImageRepository: "docker.io/maoo/s2i-java-binary"
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${BOT_NAME}
+    name: ${BOT_NAME}
+  spec: {}
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: ${BOT_NAME}
+    labels:
+      app: ${BOT_NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${BOT_NAME}:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      type: Binary
+      binary:
+    strategy:
+      type: Source
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: s2i-java-binary:latest
+    triggers: {}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${BOT_NAME}
+    name: ${BOT_NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: ${BOT_NAME}
+      deploymentconfig: ${BOT_NAME}
+    strategy:
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: ${BOT_NAME}
+          deploymentconfig: ${BOT_NAME}
+      spec:
+        containers:
+        - image: ${BOT_NAME}:latest
+          imagePullPolicy: Always
+          name: ${BOT_NAME}
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: "/symphony/votebot/v1/proposal/1"
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          env:
+          - name: ESCO_USER_LIST
+            value: ${ESCO_USER_LIST}
+          - name: ESCO_USER_VOTE
+            value: ${ESCO_USER_VOTE}
+          - name: MAIL_SEND_EMAIL
+            value: ${SEND_EMAIL}
+          - name: RUN_FOLDER
+            value: "/opt/openshift"
+          - name: RUN_COMMAND
+            value: "/opt/openshift/bin/VoteBot"
+          - name: LOG4J_FILE
+            value: "/opt/openshift/log4j.properties"
+          - name: SESSION_AUTH
+            value: https://foundation-dev-api.symphony.com/sessionauth
+          - name: KEY_AUTH
+            value: https://foundation-dev-api.symphony.com/keyauth
+          - name: SYMPHONY_POD
+            value: https://foundation-dev.symphony.com/pod
+          - name: SYMPHONY_AGENT
+            value: https://foundation-dev.symphony.com/agent
+          - name: DOWNLOAD_HOST
+            valueFrom:
+              secretKeyRef:
+                name: symphony.foundation
+                key: download.host
+          - name: DOWNLOAD_PATH
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: certs.download.path
+          - name: DOWNLOAD_ITEMS
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: certs.download.items
+          - name: TRUSTSTORE_FILE
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: truststore.file
+          - name: TRUSTSTORE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: truststore.password
+          - name: KEYSTORE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: keystore.password
+          - name: CERTS
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: certs.path
+          - name: BOT_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: bot.user
+          - name: BOT_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: bot.domain
+          - name: MCP_NOTIFICATION_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: mcp.notification.user
+          - name: MCP_NOTIFICATION_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: mcp.notification.password
+          - name: API_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: api.user
+          - name: API_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: api.password
+          - name: MAIL_SMTP_HOST
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: smtp.host
+          - name: MAIL_SMTP_USER
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: smtp.user
+          - name: MAIL_SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: smtp.password
+          - name: MAIL_SMTP_AUTH
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: smtp.auth
+          - name: MAIL_VB_FROM
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: api.password
+          - name: MAIL_DISTRO_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: api.password
+          - name: MAIL_S3_PREFIX_INCOMING
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: mail.s3.prefix.incoming
+          - name: MAIL_S3_PREFIX_PROCESSED
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: mail.s3.prefix.processed
+          - name: S3_ENABLED
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: s3.enabled
+          - name: VB_S3_PREFIX_JSON
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: vb.s3.prefix.json
+          - name: S3_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: s3.access.key
+          - name: S3_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: s3.key.id
+          - name: S3_BUCKET
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: s3.bucket.name
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${BOT_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${BOT_NAME}:latest
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: ${BOT_NAME}
+    name: ${BOT_NAME}
+  spec:
+    ports:
+    - name: healthcheck-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: ${BOT_NAME}
+      deploymentconfig: ${BOT_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: ${BOT_NAME}
+    labels:
+      app: ${BOT_NAME}
+  spec:
+    to:
+      kind: Service
+      name: ${BOT_NAME}
+      weight: 100
+    port:
+      targetPort: healthcheck-tcp
+    wildcardPolicy: None
