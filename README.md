@@ -1,5 +1,5 @@
-[![Votebot Prod Watcher](https://hv0dbm9dsd.execute-api.us-east-1.amazonaws.com/Prod/votebot-badge)](https://foundation.symphony.com)
-[![Votebot Dev Watcher](https://hv0dbm9dsd.execute-api.us-east-1.amazonaws.com/Prod/votebot-dev-badge)](https://foundation.symphony.com)
+[![Vote Bot Prod Log Watcher](https://hv0dbm9dsd.execute-api.us-east-1.amazonaws.com/Prod/badge?oc_bot_name=votebot-prod&oc_project_name=ssf-prod)](https://foundation.symphony.com)
+[![Vote Bot Dev Log Watcher](https://hv0dbm9dsd.execute-api.us-east-1.amazonaws.com/Prod/badge?oc_bot_name=votebot-dev&oc_project_name=ssf-dev)](https://foundation-dev.symphony.com)
 
 The bot provides vote capabilities on proposals amongst a defined list of users over a relay chat.
 
