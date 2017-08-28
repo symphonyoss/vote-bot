@@ -20,7 +20,7 @@
 # under the License.
 #
 
-after_success: "if [[ \"$TRAVIS_PULL_REQUEST\" = \"false\" && $TRAVIS_BRANCH =~ master ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash ; fi"
+after_success: if [[ "$TRAVIS_PULL_REQUEST" = "false" ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash -s -- ${TRAVIS_BRANCH}; fi
 
 language: java
 
@@ -33,6 +33,12 @@ jdk:
 
 env:
   global:
-   # Used by oc-deploy.sh for CD
-   - OC_BINARY_ARCHIVE=vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT-appassembler.zip
-   - OC_BUILD_CONFIG_NAME=votebot-prod
+    # Used by oc-deploy.sh for CD
+    - OC_BUILD_CONFIG_NAME_DEVELOP=votebot-dev
+    - OC_PROJECT_NAME_DEVELOP=ssf-dev
+    - OC_BUILD_CONFIG_NAME_MASTER=votebot-prod
+    - OC_PROJECT_NAME_MASTER=ssf-prod
+    - OC_BINARY_FOLDER="vote-bot-service/target/oc"
+    - OC_ENDPOINT="https://api.pro-us-east-1.openshift.com"
+    # ESCO_USER_LIST and ESCO_USER_VOTE (for dev and prod) are defined via Travis Settings and set by after-build-success.sh script
+    - OC_TEMPLATE_PROCESS_ARGS="-p BOT_NAME=$OC_BUILD_CONFIG_NAME -p ESCO_USER_LIST=$ESCO_USER_LIST -p ESCO_USER_VOTE=$ESCO_USER_VOTE"

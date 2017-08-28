@@ -1,3 +1,6 @@
+[![Vote Bot Prod Log Watcher](https://hv0dbm9dsd.execute-api.us-east-1.amazonaws.com/Prod/badge?oc_bot_name=votebot-prod&oc_project_name=ssf-prod)](https://foundation.symphony.com)
+[![Vote Bot Dev Log Watcher](https://hv0dbm9dsd.execute-api.us-east-1.amazonaws.com/Prod/badge?oc_bot_name=votebot-dev&oc_project_name=ssf-dev)](https://foundation-dev.symphony.com)
+
 The bot provides vote capabilities on proposals amongst a defined list of users over a relay chat.
 
 # Build
@@ -6,29 +9,36 @@ Type `mvn package`.
 
 When the build completes, the ZIP file containing all bot logic can be found at `vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT-appassembler.zip`.
 
-# Deploy to Openshift
+## Openshift
 
-First of all, select which environment/build to target by setting these environment variables:
-
-```
-export OC_PROJECT=botfarm
-# Choose between votebot-dev and votebot-prod
-export OC_DEPLOY=votebot-dev
-```
-
-1. [Install Openshift commandline](https://docs.openshift.org/latest/cli_reference/get_started_cli.html) tool `oc`
-2. Authenticate against Openshift Online instance of the Symphony Software Foundation using `oc login https://api.starter-us-east-1.openshift.com --token=$OC_TOKEN` ; the `OC_TOKEN` can be requested to Foundation Staff
-3. Use Openshift project using `oc project $OC_PROJECT`
-4. Checkout this project, `cd` into the root folder and build the project with `mvn package`
-5. Unzip the package being created using `unzip vote-bot-service/target/vote-bot-service-0.9.0-SNAPSHOT-appassembler.zip -d vote-bot-service/target/oc`
-6. Deploy the archive created using `oc start-build $OC_DEPLOY --from-dir=vote-bot-service/target/oc/vote-bot-service-0.9.0-SNAPSHOT/ --wait=true -n $OC_PROJECT`
-
-# Reset Openshift environment
 In order to run these commands you need to have access to the Openshift YAML definitions, which are managed by Foundation Staff.
 
-1. Delete all existing Openshift resources - `oc delete imagestream $OC_DEPLOY; oc delete buildconfig $OC_DEPLOY; oc delete dc $OC_DEPLOY; oc delete svc $OC_DEPLOY; oc delete route $OC_DEPLOY; oc delete secret $OC_DEPLOY.certs`
-2. Create Openshift secrets - `oc process -f ./secrets/$OC_DEPLOY.yaml | oc create -f -`
-3. Create other Openshift resources - `oc process -f ./builds/$OC_DEPLOY-build-template.yaml | oc create -f -`
+### Deploy to Openshift
+
+```
+. ./env-dev.sh
+curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash
+```
+
+Make sure the following vars are included in `env-dev.sh`.
+```
+export OC_TOKEN=<your oc token>
+export OC_PROJECT=botfarm
+export OC_BINARY_FOLDER="vote-bot-service/target/oc"
+# Choose between votebot-dev or votebot-prod
+export OC_BUILD_CONFIG_NAME="votebot-dev"
+export OC_ENDPOINT="https://api.pro-us-east-1.openshift.com"
+export OC_PROJECT_NAME="ssf-dev"
+export ESCO_USER_VOTE=""
+export ESCO_USER_LIST=""
+export OC_TEMPLATE_PROCESS_ARGS="-p ESCO_USER_LIST=$ESCO_USER_LIST -p ESCO_USER_VOTE=$ESCO_USER_VOTE"
+```
+
+When configuring the environment variables via Travis CI settings, make sure to escape ' ', '(' and ')' chars, adding a '\' before.
+
+### Reset Openshift environment
+
+To delete all existing Openshift resources, simply invoke `oc delete all -l app=votebot-dev` (secrets, which are managed by Foundation staff, will not be removed)
 
 ### PROPOSAL
 
