@@ -9,7 +9,7 @@ if [[ $BRANCH_NAME =~ master ]]; then
     export BOT_NAME="votebot-prod"
     export OC_PROJECT_NAME="ssf-prod"
 
-elif [[ $BRANCH_NAME =~ dev ]]; then
+elif [[ $BRANCH_NAME =~ develop ]]; then
 	# Reset Openshift env on every build, for testing purposes
 	export OC_DELETE_LABEL="app=votebot-dev"
 	export SYMPHONY_POD_HOST="foundation-dev.symphony.com"
