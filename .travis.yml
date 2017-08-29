@@ -40,5 +40,4 @@ env:
     - OC_PROJECT_NAME_MASTER=ssf-prod
     - OC_BINARY_FOLDER="vote-bot-service/target/oc"
     - OC_ENDPOINT="https://api.pro-us-east-1.openshift.com"
-    # ESCO_USER_LIST and ESCO_USER_VOTE (for dev and prod) are defined via Travis Settings and set by after-build-success.sh script
-    - OC_TEMPLATE_PROCESS_ARGS="BOT_NAME,ESCO_USER_LIST,ESCO_USER_VOTE"
+    - OC_TEMPLATE_PROCESS_ARGS="BOT_NAME"
