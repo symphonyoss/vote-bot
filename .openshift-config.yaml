@@ -13,14 +13,6 @@ parameters:
   displayName: Send Email?
   required: true
   value: "true"
-- name: ESCO_USER_LIST
-  description: The list of votebot users that are part of the relay
-  displayName: ESCo User List
-  required: true
-- name: ESCO_USER_VOTE
-  description: The list of votebot users that are allowed to vote
-  displayName: ESCo User Vote List
-  required: true
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -105,9 +97,15 @@ objects:
           terminationMessagePath: /dev/termination-log
           env:
           - name: ESCO_USER_LIST
-            value: ${ESCO_USER_LIST}
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: esco.user.list
           - name: ESCO_USER_VOTE
-            value: ${ESCO_USER_VOTE}
+            valueFrom:
+              secretKeyRef:
+                name: ${BOT_NAME}.certs
+                key: esco.user.vote
           - name: MAIL_SEND_EMAIL
             value: ${SEND_EMAIL}
           - name: RUN_FOLDER
