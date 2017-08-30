@@ -17,12 +17,12 @@ parameters:
   description: The Symphony API host
   displayName: Symphony API host
   required: true
-  value: "foundation-dev-api.symphony.com"
+  # value: "foundation-dev-api.symphony.com"
 - name: SYMPHONY_POD_HOST
   description: The Symphony Pod host
   displayName: Symphony Pod host
   required: true
-  value: "foundation-dev.symphony.com"
+  # value: "foundation-dev.symphony.com"
 objects:
 - apiVersion: v1
   kind: ImageStream

@@ -20,7 +20,7 @@ fi
 
 export OC_BINARY_FOLDER="vote-bot-service/target/oc"
 export OC_ENDPOINT="https://api.pro-us-east-1.openshift.com"
-export OC_TEMPLATE_PROCESS_ARGS="BOT_NAME"
+export OC_TEMPLATE_PROCESS_ARGS="BOT_NAME,SYMPHONY_POD_HOST,SYMPHONY_API_HOST"
 
 if [[ "$TRAVIS_PULL_REQUEST" = "false" ]]; then
 	curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash
