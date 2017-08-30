@@ -221,12 +221,12 @@ objects:
             valueFrom:
               secretKeyRef:
                 name: ${BOT_NAME}.certs
-                key: api.password
+                key: mail.vb.from
           - name: MAIL_DISTRO_EMAIL
             valueFrom:
               secretKeyRef:
                 name: ${BOT_NAME}.certs
-                key: api.password
+                key: mail.distro.email
           - name: MAIL_S3_PREFIX_INCOMING
             valueFrom:
               secretKeyRef:
