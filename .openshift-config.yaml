@@ -13,6 +13,16 @@ parameters:
   displayName: Send Email?
   required: true
   value: "true"
+- name: SYMPHONY_API_HOST
+  description: The Symphony API host
+  displayName: Symphony API host
+  required: true
+  value: "foundation-dev-api.symphony.com"
+- name: SYMPHONY_POD_HOST
+  description: The Symphony Pod host
+  displayName: Symphony Pod host
+  required: true
+  value: "foundation-dev.symphony.com"
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -115,13 +125,13 @@ objects:
           - name: LOG4J_FILE
             value: "/opt/openshift/log4j.properties"
           - name: SESSION_AUTH
-            value: https://foundation-dev-api.symphony.com/sessionauth
+            value: https://${SYMPHONY_API_HOST}/sessionauth
           - name: KEY_AUTH
-            value: https://foundation-dev-api.symphony.com/keyauth
+            value: https://${SYMPHONY_API_HOST}/keyauth
           - name: SYMPHONY_POD
-            value: https://foundation-dev.symphony.com/pod
+            value: https://${SYMPHONY_POD_HOST}/pod
           - name: SYMPHONY_AGENT
-            value: https://foundation-dev.symphony.com/agent
+            value: https://${SYMPHONY_POD_HOST}/agent
           - name: DOWNLOAD_HOST
             valueFrom:
               secretKeyRef:

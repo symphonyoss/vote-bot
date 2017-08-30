@@ -20,7 +20,8 @@
 # under the License.
 #
 
-after_success: if [[ "$TRAVIS_PULL_REQUEST" = "false" ]]; then curl -s https://raw.githubusercontent.com/symphonyoss/contrib-toolbox/master/scripts/oc-deploy.sh | bash -s -- ${TRAVIS_BRANCH}; fi
+
+after_success: ./after-success.sh $TRAVIS_BRANCH $TRAVIS_PULL_REQUEST
 
 language: java
 
@@ -30,14 +31,3 @@ script:
 
 jdk:
   - oraclejdk8
-
-env:
-  global:
-    # Used by oc-deploy.sh for CD
-    - BOT_NAME_DEVELOP=votebot-dev
-    - OC_PROJECT_NAME_DEVELOP=ssf-dev
-    - BOT_NAME_MASTER=votebot-prod
-    - OC_PROJECT_NAME_MASTER=ssf-prod
-    - OC_BINARY_FOLDER="vote-bot-service/target/oc"
-    - OC_ENDPOINT="https://api.pro-us-east-1.openshift.com"
-    - OC_TEMPLATE_PROCESS_ARGS="BOT_NAME"
