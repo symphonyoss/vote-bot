@@ -10,8 +10,8 @@ RUN apt-get update && apt-get -y install python curl unzip && cd /tmp && curl "h
 # Set env during docker run
 COPY env-entrypoint.sh /env-entrypoint.sh
 
-ADD vote-bot-service/target/vote-bot-0.9.0/ /opt/vote-bot
-ADD vote-bot-service/target/vote-bot-0.9.0/logs /logs
+ADD vote-bot-service/target/vote-bot-0.9.1/ /opt/vote-bot
+ADD vote-bot-service/target/vote-bot-0.9.1/logs /logs
 ADD vote-bot-service/target/vote-bot-classes.jar /opt/vote-bot/lib
 EXPOSE 8080
 ENTRYPOINT ["/env-entrypoint.sh"]
