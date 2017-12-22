@@ -35,6 +35,7 @@ import org.symphonyoss.client.services.SymUserCache;
 import org.symphonyoss.client.exceptions.MessagesException;
 import org.symphonyoss.client.exceptions.SymException;
 import org.symphonyoss.client.exceptions.UsersClientException;
+import org.symphonyoss.symphony.clients.model.ApiVersion;
 import org.symphonyoss.symphony.clients.model.SymMessage;
 import org.symphonyoss.symphony.clients.model.SymUser;
 import org.symphonyoss.vb.ai.VoteSessionProposalCommands;
@@ -371,6 +372,8 @@ public class VoteBotProposalService implements ChatServiceListener, ChatListener
 
     public synchronized void sendMessage(SymMessage symMessage) {
 
+        symMessage.setApiVersion(ApiVersion.V2);
+
         Chat chat = memberChats.get(symMessage.getSymUser().getId());
 
         logger.info("Sending message to user {}:{}", symMessage.getSymUser().getId(), symMessage.getSymUser().getEmailAddress());
@@ -493,12 +496,6 @@ public class VoteBotProposalService implements ChatServiceListener, ChatListener
 
     @Override
     public void newMailMessage(SymMessage symMessage) {
-
-        if (symMessage.getFormat() == SymMessage.Format.TEXT) {
-            symMessage.setMessage(MLTypes.START_ML.toString() + symMessage.getMessage() + MLTypes.END_ML);
-            symMessage.setFormat(SymMessage.Format.MESSAGEML);
-        }
-
 
         onChatMessage(symMessage);
 

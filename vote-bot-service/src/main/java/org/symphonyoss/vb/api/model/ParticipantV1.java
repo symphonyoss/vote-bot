@@ -37,11 +37,8 @@ package org.symphonyoss.vb.api.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.symphonyoss.vb.api.model.SymUserV1;
-import javax.validation.constraints.*;
 
 /**
  * ParticipantV1

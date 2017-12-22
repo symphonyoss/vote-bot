@@ -46,7 +46,6 @@ import java.util.List;
 import org.symphonyoss.vb.api.model.ParticipantV1;
 import org.symphonyoss.vb.api.model.ProposalV1;
 import org.symphonyoss.vb.api.model.VoteCommentV1;
-import javax.validation.constraints.*;
 
 /**
  * Voting proposal 

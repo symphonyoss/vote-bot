@@ -201,8 +201,8 @@ public class MailReader {
             if (messageText.length() == 0)
                 throw new SymException("Mail message contained no body");
 
-            symMessage.setMessage(messageText);
-            symMessage.setFormat(SymMessage.Format.TEXT);
+            symMessage.setMessageText(messageText);
+
 
             Address[] froms = message.getFrom();
 

@@ -27,19 +27,17 @@ import org.jvnet.hk2.annotations.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.client.SymphonyClient;
+import org.symphonyoss.client.SymphonyClientConfig;
+import org.symphonyoss.client.SymphonyClientConfigID;
 import org.symphonyoss.client.SymphonyClientFactory;
-import org.symphonyoss.client.impl.CustomHttpClient;
-import org.symphonyoss.client.model.SymAuth;
 import org.symphonyoss.client.services.RoomService;
 import org.symphonyoss.client.exceptions.SymException;
-import org.symphonyoss.symphony.clients.AuthorizationClient;
 import org.symphonyoss.symphony.clients.model.SymMessage;
+import org.symphonyoss.symphony.clients.model.SymStream;
 import org.symphonyoss.symphony.pod.model.Stream;
 import org.symphonyoss.symphony.pod.model.UserIdList;
 import org.symphonyoss.vb.model.NotificationMessage;
-
 import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.client.Client;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -119,45 +117,38 @@ public class BotServices {
         }
 
 
+        SymphonyClientConfig symphonyClientConfig = new SymphonyClientConfig();
+        symphonyClientConfig.set(SymphonyClientConfigID.AGENT_URL,System.getProperty("symphony.agent.agent.url"));
+        symphonyClientConfig.set(SymphonyClientConfigID.POD_URL, System.getProperty("symphony.agent.pod.url"));
+        symphonyClientConfig.set(SymphonyClientConfigID.KEYAUTH_URL, System.getProperty("keyauth.url"));
+        symphonyClientConfig.set(SymphonyClientConfigID.SESSIONAUTH_URL, System.getProperty("sessionauth.url"));
+        symphonyClientConfig.set(SymphonyClientConfigID.TRUSTSTORE_FILE, System.getProperty("truststore.file"));
+        symphonyClientConfig.set(SymphonyClientConfigID.TRUSTSTORE_PASSWORD, System.getProperty("truststore.password"));
+        symphonyClientConfig.set(SymphonyClientConfigID.USER_CERT_FILE, System.getProperty("certs.dir") + userName + ".p12");
+        symphonyClientConfig.set(SymphonyClientConfigID.USER_CERT_PASSWORD, System.getProperty("keystore.password"));
+        symphonyClientConfig.set(SymphonyClientConfigID.USER_EMAIL, fromUser);
+
+
+
         //Create a basic client instance.
-        SymphonyClient symClient = SymphonyClientFactory.getClient(SymphonyClientFactory.TYPE.BASIC);
-
-        logger.debug("{} {}", System.getProperty("sessionauth.url"),
-                System.getProperty("keyauth.url"));
+        SymphonyClient symClient = SymphonyClientFactory.getClient(SymphonyClientFactory.TYPE.V4, symphonyClientConfig);
 
 
-        try {
-            Client httpClient = CustomHttpClient.getClient(
-                    System.getProperty("certs.dir") + userName + ".p12",
-                    System.getProperty("keystore.password"),
-                    System.getProperty("truststore.file"),
-                    System.getProperty("truststore.password"));
-            symClient.setDefaultHttpClient(httpClient);
-        } catch (Exception e) {
-            logger.error("Failed to create custom http client", e);
-            return null;
-        }
+//        try {
+//            Client httpClient = CustomHttpClient.getClient(
+//                    System.getProperty("certs.dir") + userName + ".p12",
+//                    System.getProperty("keystore.password"),
+//                    System.getProperty("truststore.file"),
+//                    System.getProperty("truststore.password"));
+//            symClient.setDefaultHttpClient(httpClient);
+//        } catch (Exception e) {
+//            logger.error("Failed to create custom http client", e);
+//            return null;
+//        }
 
 
-        //Init the Symphony authorization client, which requires both the key and session URL's.  In most cases,
-        //the same fqdn but different URLs.
-        AuthorizationClient authClient = new AuthorizationClient(
-                System.getProperty("sessionauth.url"),
-                System.getProperty("keyauth.url"),
-                symClient.getDefaultHttpClient());
 
 
-        //Create a SymAuth which holds both key and session tokens.  This will call the external service.
-        SymAuth symAuth = authClient.authenticate();
-
-
-        //With a valid SymAuth we can now init our client.
-        symClient.init(
-                symAuth,
-                fromUser,
-                System.getProperty("symphony.agent.agent.url"),
-                System.getProperty("symphony.agent.pod.url")
-        );
 
 
         symClients.put(fromUser, symClient);
@@ -215,12 +206,12 @@ public class BotServices {
         }
 
         SymMessage message = new SymMessage();
-        //message.setStreamId(notificationMessage.getToStreams());
-        if (notificationMessage.getType().equals("MESSAGEML")) {
-            message.setFormat(SymMessage.Format.MESSAGEML);
-        } else {
-            message.setFormat(SymMessage.Format.TEXT);
-        }
+//        //message.setStreamId(notificationMessage.getToStreams());
+//        if (notificationMessage.getType().equals("MESSAGEML")) {
+//            message.setFormat(SymMessage.Format.MESSAGEML);
+//        } else {
+//            message.setFormat(SymMessage.Format.TEXT);
+//        }
 
 
         message.setMessage(notificationMessage.getBody());
@@ -247,7 +238,7 @@ public class BotServices {
 
                         UserIdList userIdList = new UserIdList();
                         userIdList.add(Long.valueOf(user));
-                        Stream stream = symClient.getStreamsClient().getStream(userIdList);
+                        SymStream stream = symClient.getStreamsClient().getStream(userIdList);
                         symClient.getMessagesClient().sendMessage(stream, message);
                     }
 

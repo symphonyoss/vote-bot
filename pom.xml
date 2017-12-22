@@ -26,7 +26,7 @@
 
     <groupId>org.symphonyoss.vb</groupId>
     <artifactId>vote-bot</artifactId>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.9.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.symphonyoss.symphony</groupId>
             <artifactId>symphony-client</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>commons-configuration</groupId>

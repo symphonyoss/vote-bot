@@ -27,24 +27,13 @@ import org.symphonyoss.vb.api.V1ApiService;
 import org.symphonyoss.vb.api.factories.V1ApiServiceFactory;
 
 import io.swagger.annotations.ApiParam;
-import io.swagger.jaxrs.*;
 
-import org.symphonyoss.vb.api.model.ErrorDTO;
-import org.symphonyoss.vb.api.model.VoteProposalV1;
-
-import java.util.List;
 import org.symphonyoss.vb.api.NotFoundException;
-
-import java.io.InputStream;
-
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.*;
-import javax.validation.constraints.*;
 
 @Path("/v1")
 

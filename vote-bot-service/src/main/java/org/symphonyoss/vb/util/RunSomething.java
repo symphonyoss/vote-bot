@@ -23,14 +23,8 @@
 package org.symphonyoss.vb.util;
 
 import org.symphonyoss.symphony.clients.model.SymRoomDetail;
-import org.symphonyoss.symphony.clients.model.SymUser;
-import org.symphonyoss.vb.constants.Constants;
-import org.symphonyoss.vb.mail.MailerWorker;
 import org.symphonyoss.vb.services.BotServices;
 import org.symphonyoss.client.SymphonyClient;
-
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by frank on 3/12/17.

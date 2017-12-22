@@ -130,9 +130,6 @@ public class VoteProposalWorker implements Runnable {
         SymMessage symMessage = new SymMessage();
 
 
-        symMessage.setFormat(SymMessage.Format.MESSAGEML);
-
-
         symMessage.setSymUser(participant.getSymUser());
 
         symMessage.setMessage(VoteProposalFormatter.getStatusMessage(voteProposal, newVote, participant.getSymUser().getId()));
