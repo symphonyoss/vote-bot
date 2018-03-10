@@ -96,16 +96,26 @@ objects:
           name: ${BOT_NAME}
           ports:
           - containerPort: 8080
+            name: jetty
+            protocol: TCP
+          - containerPort: 8778
+            name: jolokia
             protocol: TCP
           readinessProbe:
             httpGet:
-              path: "/symphony/votebot/v1/proposal/1"
-              port: 8080
+              path: /jolokia/exec/org.symphonyoss.client:type=ClientCheckMBean/isUp
+              port: 8778
+          livenessProbe:
+            httpGet:
+              path: /jolokia/exec/org.symphonyoss.client:type=ClientCheckMBean/isUp
+              port: 8778
             initialDelaySeconds: 15
             timeoutSeconds: 1
           resources: {}
           terminationMessagePath: /dev/termination-log
           env:
+          - name: JOLOKIA_HOST
+            value: "*"
           - name: ESCO_USER_LIST
             valueFrom:
               secretKeyRef:
@@ -281,35 +291,26 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
     labels:
       app: ${BOT_NAME}
-    name: ${BOT_NAME}
+    name: votebot-jolokia
   spec:
-    ports:
-    - name: healthcheck-tcp
-      port: 8080
-      protocol: TCP
-      targetPort: 8080
+    type: NodePort
     selector:
       app: ${BOT_NAME}
-      deploymentconfig: ${BOT_NAME}
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
+    ports:
+    - name: ${BOT_NAME}-jolokia-port
+      nodePort: 30778
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
 - apiVersion: v1
   kind: Route
   metadata:
-    name: ${BOT_NAME}
     labels:
       app: ${BOT_NAME}
+    name: ${BOT_NAME}-jolokia
   spec:
     to:
       kind: Service
-      name: ${BOT_NAME}
-      weight: 100
-    port:
-      targetPort: healthcheck-tcp
-    wildcardPolicy: None
+      name: votebot-jolokia

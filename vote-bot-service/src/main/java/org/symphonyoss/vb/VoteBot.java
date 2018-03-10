@@ -30,6 +30,10 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.symphonyoss.vb.config.BotConfig;
+import org.jolokia.jvmagent.JolokiaServer;
+import org.jolokia.jvmagent.JolokiaServerConfig;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Frank on 9/4/2015.
@@ -84,8 +88,13 @@ public class VoteBot {
 
             server.join();
 
-
-
+            // Init Jolokja agent
+            Map<String, String> serverConfigMap = new HashMap<>();
+            // TODO - take it from SJC config
+            serverConfigMap.put("JOLOKIA_HOST","*");
+            JolokiaServerConfig serverConfig = new JolokiaServerConfig(serverConfigMap);
+            JolokiaServer jolokiaServer = new JolokiaServer(serverConfig, true);
+            jolokiaServer.start();
         } catch (Exception e) {
 
             e.printStackTrace();
