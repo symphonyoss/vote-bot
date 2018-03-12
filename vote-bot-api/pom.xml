@@ -14,18 +14,18 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.zalando.maven.plugins</groupId>
+                <groupId>io.swagger</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>${zalando.swagger.codegen.maven.plugin.version}</version>
+                <version>${swagger-codegen-maven-plugin-version}</version>
                 <executions>
                     <execution>
                         <id>JSON to code Generation</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>codegen</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <apiFile>${basedir}/src/main/resources/vote-bot-api.yaml</apiFile>
+                            <inputSpec>${basedir}/src/main/resources/vote-bot-api.yaml</inputSpec>
                             <language>dynamic-html</language>
                         </configuration>
                     </execution>

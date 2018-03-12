@@ -44,8 +44,8 @@
         <swagger-version>1.5.13</swagger-version>
         <swagger-core-version>1.5.13</swagger-core-version>
         <jetty-version>9.3.11.v20160721</jetty-version>
-        <zalando.swagger.codegen.maven.plugin.version>0.4.35</zalando.swagger.codegen.maven.plugin.version>
-        <zalando.swagger.codegen.templates.version>0.4.35</zalando.swagger.codegen.templates.version>
+        <!--<zalando.swagger.codegen.maven.plugin.version>0.4.35</zalando.swagger.codegen.maven.plugin.version>-->
+        <!--<zalando.swagger.codegen.templates.version>0.4.35</zalando.swagger.codegen.templates.version>-->
         <swagger-codegen-maven-plugin-version>2.2.1</swagger-codegen-maven-plugin-version>
         <jetty-version>9.2.9.v20150224</jetty-version>
         <jersey2-version>2.22.2</jersey2-version>

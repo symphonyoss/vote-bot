@@ -41,6 +41,7 @@
             <plugin>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger-codegen-maven-plugin-version}</version>
                 <executions>
                     <execution>
                         <id>YAML to code Generation</id>
