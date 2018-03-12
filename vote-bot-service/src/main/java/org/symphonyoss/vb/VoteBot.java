@@ -90,7 +90,7 @@ public class VoteBot {
             // Init Jolokja agent
             Map<String, String> serverConfigMap = new HashMap<>();
             // TODO - take it from SJC config
-            serverConfigMap.put("JOLOKIA_HOST","*");
+            serverConfigMap.put("host","*");
             JolokiaServerConfig serverConfig = new JolokiaServerConfig(serverConfigMap);
             JolokiaServer jolokiaServer = new JolokiaServer(serverConfig, true);
             jolokiaServer.start();
