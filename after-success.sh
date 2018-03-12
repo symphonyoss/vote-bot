@@ -21,6 +21,9 @@ elif [[ $BRANCH_NAME =~ develop ]]; then
     export BOT_NAME="votebot-dev"
     export OC_PROJECT_NAME="ssf-dev"
     export JOLOKIA_NODE_PORT=30011
+else
+	echo "Skipping deployment for branch $BRANCH_NAME"
+	exit 0
 fi
 
 export OC_BINARY_FOLDER="vote-bot-service/target/oc"
