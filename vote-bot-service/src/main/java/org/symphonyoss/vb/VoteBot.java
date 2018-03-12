@@ -86,7 +86,6 @@ public class VoteBot {
                 logger.error("Interrupt exception", e);
             }
 
-            server.join();
 
             // Init Jolokja agent
             Map<String, String> serverConfigMap = new HashMap<>();
@@ -95,6 +94,11 @@ public class VoteBot {
             JolokiaServerConfig serverConfig = new JolokiaServerConfig(serverConfigMap);
             JolokiaServer jolokiaServer = new JolokiaServer(serverConfig, true);
             jolokiaServer.start();
+
+
+            server.join();
+
+
         } catch (Exception e) {
 
             e.printStackTrace();
