@@ -4,6 +4,9 @@
 The bot provides vote capabilities on proposals amongst a defined list of users over a relay chat.
 
 # Build
+
+[![FINOS - Archived](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-archived.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Archived)
+
 Type `mvn package`.
 
 When the build completes, the ZIP file containing all bot logic can be found at `vote-bot-service/target/vote-bot-service-0.9.1-SNAPSHOT-appassembler.zip`.
